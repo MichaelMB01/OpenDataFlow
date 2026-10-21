@@ -1,0 +1,49 @@
+# Import pandas for working with DataFrames and Parquet files.
+import pandas as pd
+
+# Import the cleaning function from our cleaning module.
+from src.clean_data import transform
+
+# Load the original January 2024 taxi dataset from the raw data folder.
+raw_data = pd.read_parquet("data/raw/yellow_tripdata_2024-01.parquet")
+
+# Display the number of rows in the original dataset.
+print("Original rows:",len(raw_data))
+
+# Apply the cleaning function and store the result in a new DataFrame.
+clean_data = transform(raw_data)
+
+# Display the number of rows remaining after cleaning.
+print("Cleaned rows:", len(clean_data))
+
+# Calculate how many rows were removed during cleaning.
+print("Rows removed:", len(raw_data) - len(clean_data))
+
+# Count missing pickup timestamps in the original dataset.
+raw_data["tpep_pickup_datetime"].isna().sum()
+print("Missing pickup timestamps:", raw_data["tpep_pickup_datetime"].isna().sum())
+
+# Count missing drop-off timestamps in the original dataset.
+raw_data["tpep_dropoff_datetime"].isna().sum()
+print("Missing dropoff timestamps:", raw_data["tpep_dropoff_datetime"].isna().sum())
+
+# Count trips where the drop-off timestamp is earlier than the pickup timestamp.
+dropoff_before_pickup = (raw_data["tpep_dropoff_datetime"] < raw_data["tpep_pickup_datetime"]).sum()
+print("Drop-off before pickup:", dropoff_before_pickup)
+zero_duration_trips = (raw_data["tpep_pickup_datetime"] == raw_data["tpep_dropoff_datetime"] ).sum()
+print("Zero_duration_trips:", zero_duration_trips) 
+
+# Confirm that the original DataFrame still has its initial number of rows.
+print("Raw rows after cleaning:",  len(raw_data))
+
+
+clean_data.to_parquet("data/processed/yellow_tripdata_2024-01_clean.parquet")
+
+
+saved_data = pd.read_parquet("data/processed/yellow_tripdata_2024-01_clean.parquet")
+
+print(len(clean_data) == len(saved_data))
+
+print(saved_data.columns.equals(clean_data.columns))
+
+print("Duplicate Row:", clean_data.duplicated().sum())
