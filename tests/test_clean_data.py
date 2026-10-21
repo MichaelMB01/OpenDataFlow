@@ -61,3 +61,25 @@ def test_remove_missing_timestamps_trip():
     assert len(clean_data) == 1
 
     assert clean_data["trip_duration_minutes"].iloc[0] == 15
+
+
+
+def test_transform_does_not_modify_original_data():
+    raw_data = pd.DataFrame({
+        "tpep_pickup_datetime": pd.to_datetime([
+            "2024-01-01 10:00:00",	
+            "2024-01-01 11:00:00",
+        ]),
+
+        "tpep_dropoff_datetime": pd.to_datetime([
+            "2024-01-01 10:00:00",
+            "2024-01-01 11:15:00",
+        ]),
+    })
+
+
+    original_data = raw_data.copy()
+
+    clean_data = transform(raw_data)
+
+    pd.testing.assert_frame_equal(original_data, raw_data)
