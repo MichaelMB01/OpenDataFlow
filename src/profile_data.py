@@ -80,3 +80,6 @@ print(quality_summary)
 
 with open("data/processed/quality_report.json", "w") as file:
     json.dump(quality_summary, file, indent=4)
+
+print(df.columns)
+print(df.dtypes)
