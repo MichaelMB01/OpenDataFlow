@@ -4,14 +4,36 @@ import pandas as pd
 # Import the cleaning function from our cleaning module.
 from src.clean_data import transform
 
+from src.validate_data import validate_data
+
 # Load the original January 2024 taxi dataset from the raw data folder.
 raw_data = pd.read_parquet("data/raw/yellow_tripdata_2024-01.parquet")
+
+# Validate the raw DataFrame to check whether it meets
+# the data quality rules defined in validate_data().
+raw_data_is_valid =  validate_data(raw_data)
+
 
 # Display the number of rows in the original dataset.
 print("Original rows:",len(raw_data))
 
 # Apply the cleaning function and store the result in a new DataFrame.
 clean_data = transform(raw_data)
+
+# Validate the cleaned DataFrame to check whether it meets
+# the data quality rules defined in validate_data().
+clean_data_is_valid = validate_data(clean_data)
+
+print("Cleaned data is valid:", clean_data_is_valid)
+
+# Check whether the cleaned data failed validation.
+# The 'not' keyword means this condition is True when
+# clean_data_is_valid is False.
+if not clean_data_is_valid:
+
+    # Raise an error to stop the pipeline if the cleaned
+    # data does not pass validation.
+    raise ValueError("Cleaned data validation failed")
 
 # Display the number of rows remaining after cleaning.
 print("Cleaned rows:", len(clean_data))
