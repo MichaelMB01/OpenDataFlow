@@ -36,14 +36,22 @@ print("Zero_duration_trips:", zero_duration_trips)
 # Confirm that the original DataFrame still has its initial number of rows.
 print("Raw rows after cleaning:",  len(raw_data))
 
-
+# Save the cleaned DataFrame to a Parquet file in the processed data folder
 clean_data.to_parquet("data/processed/yellow_tripdata_2024-01_clean.parquet")
 
-
+# Read the saved Parquet file back into a new DataFrame.
+# This checks that the saved file can be loaded successfully.
 saved_data = pd.read_parquet("data/processed/yellow_tripdata_2024-01_clean.parquet")
 
+# Compare the number of rows in the original cleaned DataFrame
+# with the number of rows in the DataFrame loaded from the saved file.
+# True means both DataFrames contain the same number of rows.
 print(len(clean_data) == len(saved_data))
 
+# Compare the column names and their order in both DataFrames.
+# True means the saved data has the same columns in the same order.
 print(saved_data.columns.equals(clean_data.columns))
 
+# Count the number of duplicate rows in the cleaned DataFrame.
+# A result of 0 means no exact duplicate rows were found.
 print("Duplicate Row:", clean_data.duplicated().sum())

@@ -53,4 +53,7 @@ def validate_data(df):
             # Display a message explaining the data-quality problem.
             print("Invalid trip duration found.")
 
+    # Return the final validation result:
+    # True if the data passes all checks, or False if any check fails.
     return is_valid
+
