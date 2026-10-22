@@ -11,7 +11,7 @@ raw_data = pd.read_parquet("data/raw/yellow_tripdata_2024-01.parquet")
 
 # Validate the raw DataFrame to check whether it meets
 # the data quality rules defined in validate_data().
-raw_data_is_valid =  validate_data(raw_data)
+raw_data_is_valid = validate_data(raw_data)
 
 
 # Display the number of rows in the original dataset.
