@@ -1,6 +1,8 @@
 # Import pandas for working with DataFrames.
 import pandas as pd
 
+import logging
+
 def validate_data(df):
     """Check the quality of a DataFrame."""
 
@@ -51,7 +53,7 @@ def validate_data(df):
             is_valid = False
 
             # Display a message explaining the data-quality problem.
-            print("Invalid trip duration found.")
+            logging.warning("Invalid trip duration found.")
 
     # Return the final validation result:
     # True if the data passes all checks, or False if any check fails.
