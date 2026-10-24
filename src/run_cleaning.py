@@ -4,12 +4,11 @@ import pandas as pd
 # Import Python's logging module to record pipeline progress and warnings.
 import logging
 
-# Import Path to create, inspect, and check file and directory paths.
-from pathlib import Path
-
 # Import PyArrow to access its Parquet-related functionality
 # and handle specific errors when reading Parquet files.
 import pyarrow
+
+from src.config import RAW_DATA_PATH, PROCESSED_DATA_DIR, CLEANED_DATA_PATH
 
 # Configure logging to display INFO-level messages and above.
 # The format shows the severity level (INFO, WARNING, ERROR, etc.)
@@ -33,8 +32,8 @@ def check_input_file(input_path):
 
 
 def main():
-    # Create a Path object pointing to the raw January 2024 taxi dataset.
-    input_path = Path("data/raw/yellow_tripdata_2024-01.parquet")
+    # Get the path to the raw January 2024 taxi dataset from the configuration.
+    input_path = RAW_DATA_PATH
 
     # Check whether the input file exists before reading it.
     check_input_file(input_path)
@@ -101,7 +100,7 @@ def main():
 
 
     # Define the folder where the cleaned data will be saved.
-    output_dir = Path("data/processed")
+    output_dir = PROCESSED_DATA_DIR
 
     # Create the output folder if it does not exist.
     # parents=True creates any missing parent folders.
@@ -109,7 +108,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Build the complete output file path using the folder and filename.
-    output_path = output_dir / "yellow_tripdata_2024-01_clean.parquet"
+    output_path = CLEANED_DATA_PATH
 
     # Attempt to save the cleaned DataFrame to the specified Parquet file.
     try:
