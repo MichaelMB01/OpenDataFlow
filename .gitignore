@@ -8,9 +8,8 @@ venv/
 .env
 .env.*
 
-# Raw and processed datasets
-data/raw/*
-data/processed/*
+# Raw and processed datasets and test outputs
+data/
 
 # Test and tool caches
 .pytest_cache/
