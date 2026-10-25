@@ -1,0 +1,47 @@
+CREATE TABLE  IF NOT EXISTS staging_trips(
+        trip_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        vendorid INTEGER,
+        tpep_pickup_datetime TIMESTAMP,
+        tpep_dropoff_datetime TIMESTAMP,
+        passenger_count INTEGER,
+        trip_distance NUMERIC,
+        ratecodeid INTEGER,
+        store_and_fwd_flag CHAR(1),
+        pulocationid INTEGER,
+        dolocationid INTEGER,
+        payment_type INTEGER,
+        fare_amount NUMERIC,
+        total_amount NUMERIC,
+        congestion_surcharge NUMERIC,
+        airport_fee NUMERIC,
+        extra NUMERIC,
+        mta_tax NUMERIC,
+        tip_amount NUMERIC,
+        tolls_amount NUMERIC,
+        improvement_surcharge NUMERIC
+
+);
+
+CREATE TABLE IF NOT EXISTS cleaned_trips (
+    trip_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    vendorid INTEGER,
+    tpep_pickup_datetime TIMESTAMP,
+    tpep_dropoff_datetime TIMESTAMP,
+    passenger_count INTEGER,
+    trip_distance NUMERIC,
+    ratecodeid INTEGER,
+    store_and_fwd_flag CHAR(1),
+    pulocationid INTEGER,
+    dolocationid INTEGER,
+    payment_type INTEGER,
+    fare_amount NUMERIC,
+    total_amount NUMERIC,
+    congestion_surcharge NUMERIC,
+    airport_fee NUMERIC,
+    extra NUMERIC,
+    mta_tax NUMERIC,
+    tip_amount NUMERIC,
+    tolls_amount NUMERIC,
+    improvement_surcharge NUMERIC,
+    trip_duration_minutes NUMERIC
+);
