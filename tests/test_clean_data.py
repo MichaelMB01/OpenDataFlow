@@ -11,6 +11,9 @@ from src.clean_data import transform
 # This function checks whether the input file exists.
 from src.run_cleaning import check_input_file
 
+# Import the configured raw-data path.
+from src.config import RAW_DATA_PATH
+
 # Test that trips with zero duration are removed.
 def test_remove_zero_duration_trip():
 
@@ -138,3 +141,7 @@ def test_check_input_file_missing(tmp_path):
     # Check that our function raises FileNotFoundError for a missing file.
     with pytest.raises(FileNotFoundError):
         check_input_file(check_file)
+
+# Test that the configured raw-data path points to an existing file.
+def test_raw_data_path_exists():
+    assert RAW_DATA_PATH.exists()

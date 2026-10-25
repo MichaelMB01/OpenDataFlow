@@ -1,8 +1,15 @@
 # Import Path to work with file and folder paths.
 from pathlib import Path
 
-# Store the path to the original, uncleaned taxi dataset.
-RAW_DATA_PATH = Path("data/raw/yellow_tripdata_2024-01.parquet")
+# Define the folder where the original, uncleaned datasets are stored.
+RAW_DATA_DIR = Path("data/raw")
+
+# Store the filename of the original, uncleaned taxi dataset.
+RAW_DATA_FILENAME = "yellow_tripdata_2024-01.parquet"
+
+# Combine the raw-data directory and filename into one complete path.
+RAW_DATA_PATH = RAW_DATA_DIR / RAW_DATA_FILENAME
+
 
 # Store the directory where processed data will be saved.
 PROCESSED_DATA_DIR = Path("data/processed")
