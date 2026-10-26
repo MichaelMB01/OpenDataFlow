@@ -156,8 +156,8 @@ def main():
     # Count the number of duplicate rows in the cleaned DataFrame.
     # A result of 0 means no exact duplicate rows were found.
     logging.info("Duplicate Row: %s", clean_data.duplicated().sum())
-
-
+    return len(clean_data)
 
 if __name__ == "__main__":
     main()
+    
