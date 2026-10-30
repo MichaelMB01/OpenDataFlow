@@ -53,6 +53,9 @@ def load_data(file_path=CLEANED_DATA_PATH):
             f"Missing required columns: {missing_columns}"
         )
 
+    if df.empty:
+        raise ValueError("Cleaned data file contains no rows.")
+
     # Select columns in the required insert order.
     df = df[source_columns]
 
