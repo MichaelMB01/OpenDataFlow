@@ -1,3 +1,4 @@
+import logging
 import pytest
 from unittest.mock import Mock, call, patch
 import src.run_pipeline as run_pipeline
@@ -57,3 +58,28 @@ def test_pipeline_runs_all_stages_successfully():
 
         mock_validate_database.assert_called_once_with(100)
         
+
+def test_pipeline_logs_failure_and_stops(caplog):
+    error_message = "Simulated database check failure"
+
+    with patch.object(
+        run_pipeline, "check_database_empty",
+        side_effect=ValueError(error_message)
+    ) as mock_check, \
+         patch.object(run_pipeline, "init_db") as mock_init, \
+         patch.object(run_pipeline, "run_cleaning") as mock_clean, \
+         patch.object(run_pipeline, "load_data") as mock_load, \
+         patch.object(run_pipeline, "validate_database") as mock_validate:
+
+        with caplog.at_level(logging.INFO):
+            with pytest.raises(ValueError, match=error_message):
+                run_pipeline.main()
+
+    assert "OpenDataFlow pipeline failed." in caplog.text
+    assert error_message in caplog.text
+
+    mock_check.assert_called_once()
+    mock_init.assert_not_called()
+    mock_clean.assert_not_called()
+    mock_load.assert_not_called()
+    mock_validate.assert_not_called()
