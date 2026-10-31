@@ -14,3 +14,9 @@ data/
 # Test and tool caches
 .pytest_cache/
 .coverage
+
+# Airflow local files
+airflow/logs/
+airflow/plugins/
+airflow/config/airflow.cfg
+airflow/.env
