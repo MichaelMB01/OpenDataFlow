@@ -1,61 +1,66 @@
-# Import pandas for working with DataFrames.
-import pandas as pd
-
 import logging
 
-def validate_data(df):
-    """Check the quality of a DataFrame."""
+import pandas as pd
 
-     # Check whether both required timestamp columns exist.
-    required_columns_exist = (
-        "tpep_pickup_datetime" in df.columns 
-        and "tpep_dropoff_datetime" in df.columns
+
+logger = logging.getLogger(__name__)
+
+REQUIRED_TIMESTAMP_COLUMNS = [
+    "tpep_pickup_datetime",
+    "tpep_dropoff_datetime",
+]
+
+
+def validate_data(df):
+    """Validate required timestamps and trip durations without modifying df."""
+
+    # Check that both required columns exist.
+    missing_columns = [
+        column
+        for column in REQUIRED_TIMESTAMP_COLUMNS
+        if column not in df.columns
+    ]
+
+    if missing_columns:
+        logger.error("Required columns are missing: %s", missing_columns)
+        return False
+
+    # Convert timestamps into local Series, not back into the original DataFrame.
+    pickup = pd.to_datetime(
+        df["tpep_pickup_datetime"],
+        format="mixed",
+        errors="coerce",
+    )
+
+    dropoff = pd.to_datetime(
+        df["tpep_dropoff_datetime"],
+        format="mixed",
+        errors="coerce",
+    )
+
+    # Missing timestamps and unparseable timestamp strings become NaT.
+    invalid_timestamps = pickup.isna() | dropoff.isna()
+
+    if invalid_timestamps.any():
+        logger.warning(
+            "Found %s rows with missing or invalid timestamps.",
+            int(invalid_timestamps.sum()),
         )
 
-# Start by assuming the data is valid.
-    is_valid = True
+    # Check duration only where both timestamps were parsed successfully.
+    valid_timestamps = ~invalid_timestamps
+    invalid_durations = (
+        (dropoff <= pickup) & valid_timestamps
+    )
 
-    # If either required column is missing, mark the data as invalid.
-    if not required_columns_exist:
-        is_valid = False
+    if invalid_durations.any():
+        logger.warning(
+            "Found %s trips with zero or negative duration.",
+            int(invalid_durations.sum()),
+        )
 
-        # Explain why the data failed validation.
-        print("required timestamp column is missing.")
-
-    # Only check timestamp values if both columns exist.
-    else:
-
-        # Count missing pickup timestamps and check for missing drop-off timestamps.
-        # If either column has one or more missing values, the condition is True.
-        if (
-            df["tpep_pickup_datetime"].isna().sum() > 0 
-            or  df["tpep_dropoff_datetime"].isna().sum() > 0
-            ):
-
-            # Mark the data as invalid if missing timestamps are found.
-            is_valid = False
-
-            # Explain why the data failed validation.
-            print("Missing timestamp values found.")
-
-
-
-    # Convert the pickup timestamp column from strings to datetime values.
-        df["tpep_pickup_datetime"] = pd.to_datetime(df["tpep_pickup_datetime"])
-
-        # Convert the drop-off timestamp column from strings to datetime values.
-        df["tpep_dropoff_datetime"] = pd.to_datetime(df["tpep_dropoff_datetime"])
-
-        # Check whether any trip's drop-off time is earlier than or equal to its pickup time.
-        if (df["tpep_dropoff_datetime"] <= df["tpep_pickup_datetime"]).any():
-
-            # Mark the data as invalid if at least one trip has an invalid duration.
-            is_valid = False
-
-            # Display a message explaining the data-quality problem.
-            logging.warning("Invalid trip duration found.")
-
-    # Return the final validation result:
-    # True if the data passes all checks, or False if any check fails.
-    return is_valid
-
+    # Data is valid only when all required timestamps and durations are valid.
+    return not (
+        invalid_timestamps.any()
+        or invalid_durations.any()
+    )
