@@ -41,10 +41,9 @@ jobs:
           python - <<'PY'
           from airflow.models import DagBag
 
-          dag_bag = DagBag(
-              dag_folder="dags",
-              include_examples=False,
-          )
+            dag_bag = DagBag(
+            dag_folder="dags",
+            )
 
           assert not dag_bag.import_errors, (
               f"DAG import errors: {dag_bag.import_errors}"
