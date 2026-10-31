@@ -49,7 +49,7 @@ jobs:
               f"DAG import errors: {dag_bag.import_errors}"
           )
 
-          dag = dag_bag.get_dag("opendataflow_pipeline")
+          dag = dag_bag.dags_get("opendataflow_pipeline")
           assert dag is not None, "DAG was not discovered"
 
           expected_tasks = {
