@@ -13,12 +13,12 @@ permissions:
 
 jobs:
   validate-dag:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     env:
-        AIRFLOW_HOME: ${{ github.workspace }}/.airflow
-        AIRFLOW__CORE__LOAD_EXAMPLES: "False"
-        AIRFLOW__CORE__DAGS_FOLDER: ${{ github.workspace }}/dags
+      AIRFLOW_HOME: ${{ github.workspace }}/.airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__DAGS_FOLDER: ${{ github.workspace }}/dags
 
     steps:
       - name: Check out repository
@@ -41,9 +41,9 @@ jobs:
           python - <<'PY'
           from airflow.models import DagBag
 
-            dag_bag = DagBag(
-            dag_folder="dags",
-            )
+          dag_bag = DagBag(
+              dag_folder="dags",
+          )
 
           assert not dag_bag.import_errors, (
               f"DAG import errors: {dag_bag.import_errors}"
@@ -76,6 +76,7 @@ jobs:
               actual_upstream = dag.get_task(
                   task_id
               ).upstream_task_ids
+
               assert actual_upstream == upstream_ids, (
                   f"{task_id}: expected {upstream_ids}, "
                   f"got {actual_upstream}"
