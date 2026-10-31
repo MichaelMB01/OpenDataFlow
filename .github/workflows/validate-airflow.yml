@@ -16,9 +16,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      AIRFLOW_HOME: ${{ runner.temp }}/airflow
-      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
-      AIRFLOW__CORE__DAGS_FOLDER: ${{ github.workspace }}/dags
+        AIRFLOW_HOME: ${{ github.workspace }}/.airflow
+        AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+        AIRFLOW__CORE__DAGS_FOLDER: ${{ github.workspace }}/dags
 
     steps:
       - name: Check out repository
