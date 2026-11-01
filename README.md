@@ -176,6 +176,29 @@ python -m pytest -v
 
 At the most recent recorded local test checkpoint, **29 tests passed**.
 
+### Test Coverage
+
+The automated tests are organized into the following areas:
+
+| Test file | Focus |
+|---|---|
+| `test_clean_data.py` | Data cleaning rules and transformations |
+| `test_dag_structure.py` | Airflow DAG structure and task dependencies |
+| `test_init_db.py` | Database initialization behavior |
+| `test_load_data.py` | Data-loading behavior |
+| `test_pipeline_checks.py` | Pipeline validation and safety checks |
+| `test_profile_data.py` | Data profiling and quality reporting |
+| `test_run_pipeline.py` | Pipeline control flow and failure handling |
+| `test_validate_data.py` | Timestamp and trip-duration validation |
+
+Run all tests from the project root with:
+
+```powershell
+python -m pytest -v
+```
+
+These tests provide automated checks for individual components and pipeline control flow. They do not establish that the complete pipeline has been executed successfully against a live PostgreSQL database.
+
 This result describes the recorded test run; it is not a claim that tests have been rerun after every subsequent change.
 
 ## Configuration and Security
